@@ -1,11 +1,13 @@
 const Constants = require('../shared/constants');
 const Player = require('./player');
+const GoldGenerator = require('./goldGenerator');
 
 class Game {
   constructor() {
     this.sockets = {};
     this.players = {};
     this.golds = [];
+    this.goldGenerator = new GoldGenerator();
     this.lastUpdateTime = Date.now();
     this.shouldSendUpdate = false;
     setInterval(this.update.bind(this), 1000 / 60);
@@ -41,14 +43,14 @@ class Game {
     Object.keys(this.sockets).forEach(playerID => {
       const player = this.players[playerID];
       player.update(dt);
-      const newGold = goldGenerator.update(dt);
-      if(newGold) {
-        this.golds.push(newGold);
-      }
     });
+    const newGold = this.goldGenerator.update(dt);
+    if(newGold) {
+      this.golds.push(newGold);
+    }
 
     // Update each gold piece
-    const bulletsToRemove = [];
+    const goldToRemove = [];
     this.golds.forEach(gold => {
       if (gold.update(gold)) {
         // Destroy this gold piece

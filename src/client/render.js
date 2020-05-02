@@ -30,7 +30,7 @@ window.addEventListener('resize', debounce(40, setCanvasDimensions));
 //TODO
 function render() {
   //Refer to the state for game update info
-  const { me, others } = getCurrentState();
+  const { me, others, golds } = getCurrentState();
   if (!me) {
     return;
   }
@@ -46,6 +46,10 @@ function render() {
   // Draw all players
   renderPlayer(me, me);
   others.forEach(renderPlayer.bind(null, me));
+
+  // Draw all gold
+  golds.forEach(renderGold.bind(null, me));
+
 }
 
 //Sample background
@@ -99,6 +103,18 @@ function renderPlayer(me, player) {
     canvasY + PLAYER_RADIUS + 8,
     PLAYER_RADIUS * 2 * (1 - player.hp / PLAYER_MAX_HP),
     2,
+  );
+}
+
+//Draw gold
+function renderGold(gold) {
+  const { x, y } = gold;
+  context.drawImage(
+    getAsset('bullet.svg'),
+    canvas.width / 2 + x - GOLD_RADIUS,
+    canvas.height / 2 + y - GOLD_RADIUS,
+    GOLD_RADIUS * 2,
+    GOLD_RADIUS * 2,
   );
 }
 

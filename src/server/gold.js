@@ -1,12 +1,12 @@
 const shortid = require('shortid');
-const ObjectClass = require('./statonaryObject');
+const StationaryObjectClass = require('./stationaryObject');
 const Constants = require('../shared/constants');
 const Game = require('./game');
 
-class Gold extends ObjectClass {
-  constructor(x, y) {
+class Gold extends StationaryObjectClass {
+  constructor(id, x, y) {
     super(x, y);
-    this.parentID = parentID;
+    this.id = id;
   }
 
   // Returns true if the gold should be destroyed, TODO

@@ -11,7 +11,7 @@ class GoldGenerator {
     if (this.generateCooldown <= 0) {
       this.fireCooldown += Constants.GENERATE_COOLDOWN;
       this.id += 1;
-      return new Gold(this.id, 5000 * Math.random(), 5000 * Math.random());
+      return new Gold(this.id, 0.25 + Math.random() * 0.5, 0.25 + Math.random() * 0.5);
     }
     
     return null;
