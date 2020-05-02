@@ -35,12 +35,13 @@ class Player extends ObjectClass {
     this.gold -= cost;
     return true;
   }
-  
+
   serializeForUpdate() {
     return {
       ...(super.serializeForUpdate()),
       direction: this.direction,
       hp: this.hp,
+      gold: this.gold,
     };
   }
 }

@@ -14,12 +14,13 @@ describe('Player', () => {
   });
 
   describe('serializeForUpdate', () => {
-    it('include hp and direction in serialization', () => {
+    it('include hp, gold, and direction in serialization', () => {
       const player = new Player('123', 'guest');
 
       expect(player.serializeForUpdate())
         .toEqual(expect.objectContaining({
           hp: Constants.PLAYER_MAX_HP,
+          gold: expect.any(number),
           direction: expect.any(Number),
         }));
     });
