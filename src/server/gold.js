@@ -4,8 +4,8 @@ const Constants = require('../shared/constants');
 const Game = require('./game');
 
 class Gold extends ObjectClass {
-  constructor(parentID, x, y) {
-    super(shortid(), x, y);
+  constructor(x, y) {
+    super(x, y);
     this.parentID = parentID;
   }
 

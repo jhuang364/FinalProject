@@ -5,6 +5,7 @@ class Game {
   constructor() {
     this.sockets = {};
     this.players = {};
+    this.golds = [];
     this.lastUpdateTime = Date.now();
     this.shouldSendUpdate = false;
     setInterval(this.update.bind(this), 1000 / 60);
@@ -39,11 +40,22 @@ class Game {
     // Update each player
     Object.keys(this.sockets).forEach(playerID => {
       const player = this.players[playerID];
-      const newBullet = player.update(dt);
-      if (newBullet) {
-        this.bullets.push(newBullet);
+      player.update(dt);
+      const newGold = goldGenerator.update(dt);
+      if(newGold) {
+        this.golds.push(newGold);
       }
     });
+
+    // Update each gold piece
+    const bulletsToRemove = [];
+    this.golds.forEach(gold => {
+      if (gold.update(gold)) {
+        // Destroy this gold piece
+        goldToRemove.push(gold);
+      }
+    });
+    this.golds = this.golds.filter(gold => !goldToRemove.includes(gold));
 
     // Check if any players are dead
     Object.keys(this.sockets).forEach(playerID => {
@@ -80,11 +92,15 @@ class Game {
     const nearbyPlayers = Object.values(this.players).filter(
       p => p !== player && p.distanceTo(player) <= Constants.MAP_SIZE / 2,
     );
+    const nearbyGolds = this.golds.filter(
+      b => b.distanceTo(player) <= Constants.MAP_SIZE / 2,
+    );
 
     return {
       t: Date.now(),
       me: player.serializeForUpdate(),
       others: nearbyPlayers.map(p => p.serializeForUpdate()),
+      golds: nearbyGolds.map(g => g.serializeForUpdate()),
       leaderboard,
     };
   }

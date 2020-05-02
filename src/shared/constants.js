@@ -11,4 +11,5 @@ module.exports = Object.freeze({
     GAME_OVER: 'dead',
   },
   COLLECTION_DISTANCE: 15,
+  GENERATE_COOLDOWN: 0.25,
 });

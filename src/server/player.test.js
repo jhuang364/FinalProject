@@ -12,7 +12,17 @@ describe('Player', () => {
       expect(player.score).toBeGreaterThan(initialScore);
     });
   });
+  describe('addGold', () => {
+    it('should take damage when hit', () => {
+      const player = new Player('123', 'guest');
 
+      const gold = player.gold;
+
+      player.addGold();
+
+      expect(player.gold).toBeGreaterThan(gold);
+    });
+  });
   describe('serializeForUpdate', () => {
     it('include hp, gold, and direction in serialization', () => {
       const player = new Player('123', 'guest');
