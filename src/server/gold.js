@@ -11,8 +11,6 @@ class Gold extends ObjectClass {
 
   // Returns true if the gold should be destroyed, TODO
   update(gold) {
-    condition = false;
-    super.update(dt);
     for (let i = 0; i < Game.players.length; i++) {
       if(Game.players[i].distanceTo(gold) <= Constants.COLLECTION_DISTANCE){
         return true;
