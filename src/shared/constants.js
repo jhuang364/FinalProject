@@ -10,4 +10,5 @@ module.exports = Object.freeze({
     INPUT: 'input',
     GAME_OVER: 'dead',
   },
+  COLLECTION_DISTANCE: 15,
 });
