@@ -10,7 +10,7 @@ describe('Gold', () => {
       const y = 1;
       const gold = new Gold('test-parent-id', x, y);
       const player = new Player('123', 'guest', x, y);
-      expect(gold.update(gold)).toBe(true);
+      expect(gold.update()).toBe(true);
     });
     it('should not be destroyed if all players are too far', () => {
       const x = 1;
@@ -18,7 +18,7 @@ describe('Gold', () => {
       const gold = new Gold('test-parent-id', x, y);
       const player = new Player('123', 'guest', x, y);
 
-      expect(gold.update(gold)).toBe(false);
+      expect(gold.update()).toBe(false);
     });
   });
 });

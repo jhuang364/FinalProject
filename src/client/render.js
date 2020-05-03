@@ -5,7 +5,7 @@ import { getCurrentState } from './state';
 
 const Constants = require('../shared/constants');
 
-const { PLAYER_RADIUS, PLAYER_MAX_HP, MAP_SIZE } = Constants;
+const { PLAYER_RADIUS, PLAYER_MAX_HP, MAP_SIZE, GOLD_RADIUS } = Constants;
 
 // Get the canvas graphics context
 const canvas = document.getElementById('game-canvas');
@@ -107,12 +107,12 @@ function renderPlayer(me, player) {
 }
 
 //Draw gold
-function renderGold(gold) {
+function renderGold(me, gold) {
   const { x, y } = gold;
   context.drawImage(
     getAsset('bullet.svg'),
-    canvas.width / 2 + x - GOLD_RADIUS,
-    canvas.height / 2 + y - GOLD_RADIUS,
+    canvas.width / 2 + x - me.x - GOLD_RADIUS,
+    canvas.height / 2 + y - me.y - GOLD_RADIUS,
     GOLD_RADIUS * 2,
     GOLD_RADIUS * 2,
   );

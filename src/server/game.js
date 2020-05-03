@@ -52,10 +52,13 @@ class Game {
     // Update each gold piece
     const goldToRemove = [];
     this.golds.forEach(gold => {
-      if (gold.update(gold)) {
-        // Destroy this gold piece
-        goldToRemove.push(gold);
-      }
+        Object.keys(this.sockets).forEach(playerID => {
+          const player = this.players[playerID];
+          if(player.distanceTo(gold) <= Constants.COLLECTION_DISTANCE){
+            player.addGold();
+            goldToRemove.push(gold);
+          }
+        });
     });
     this.golds = this.golds.filter(gold => !goldToRemove.includes(gold));
 
@@ -87,7 +90,7 @@ class Game {
     return Object.values(this.players)
       .sort((p1, p2) => p2.score - p1.score)
       .slice(0, 5)
-      .map(p => ({ username: p.username, score: Math.round(p.score) }));
+      .map(p => ({ username: p.username, gold: p.gold }));
   }
 
   createUpdate(player, leaderboard) {
@@ -95,7 +98,7 @@ class Game {
       p => p !== player && p.distanceTo(player) <= Constants.MAP_SIZE / 2,
     );
     const nearbyGolds = this.golds.filter(
-      b => b.distanceTo(player) <= Constants.MAP_SIZE / 2,
+      g => g.distanceTo(player) <= Constants.MAP_SIZE / 2,
     );
 
     return {

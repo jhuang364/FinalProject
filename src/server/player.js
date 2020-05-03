@@ -24,6 +24,7 @@ class Player extends ObjectClass {
 
   addGold() {
     this.gold += 1;
+    console.log("Gold added!")
   }
   
   spendGold(cost) {
