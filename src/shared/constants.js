@@ -3,6 +3,9 @@ module.exports = Object.freeze({
   PLAYER_MAX_HP: 100,
   PLAYER_SPEED: 400,
 
+  HUT_RADIUS: 40,
+  HUT_MAX_HP: 600,
+
   MAP_SIZE: 3000,
   MSG_TYPES: {
     JOIN_GAME: 'join_game',

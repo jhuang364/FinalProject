@@ -1,5 +1,6 @@
 const ObjectClass = require('./object');
 const Gold = require('./gold')
+const Hut = require('./hut')
 const Constants = require('../shared/constants');
 
 class Player extends ObjectClass {
@@ -9,6 +10,7 @@ class Player extends ObjectClass {
     this.gold = 0;
     this.hp = Constants.PLAYER_MAX_HP;
     this.score = 0;
+    return new Hut(this.id, this.x, this.y);
   }
 
   update(dt) {

@@ -50,6 +50,9 @@ function render() {
   // Draw all gold
   golds.forEach(renderGold.bind(null, me));
 
+  // Draw all huts
+  huts.forEach(renderHut.bind(null,me));
+
 }
 
 //Sample background
@@ -115,6 +118,33 @@ function renderGold(me, gold) {
     canvas.height / 2 + y - me.y - GOLD_RADIUS,
     GOLD_RADIUS * 2,
     GOLD_RADIUS * 2,
+  );
+}
+
+//Draw hut (using player model)
+function renderHut(me, hut) {
+  const { x, y } = hut;
+  context.drawImage(
+    getAsset('ship.svg'),
+    canvas.width / 2 + x - me.x - HUT_RADIUS,
+    canvas.height / 2 + y - me.y - HUT_RADIUS,
+    HUT_RADIUS * 2,
+    HUT_RADIUS * 2,
+  );
+  // Draw hut health bar
+  context.fillStyle = 'white';
+  context.fillRect(
+    canvasX - HUT_RADIUS,
+    canvasY + HUT_RADIUS + 8,
+    HUT_RADIUS * 2,
+    2,
+  );
+  context.fillStyle = 'red';
+  context.fillRect(
+    canvasX - HUT_RADIUS + HUT_RADIUS * 2 * hut.hp / HUT_MAX_HP,
+    canvasY + HUT_RADIUS + 8,
+    HUT_RADIUS * 2 * (1 - hut.hp / HUT_MAX_HP),
+    2,
   );
 }
 
