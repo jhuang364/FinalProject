@@ -8,6 +8,7 @@ class Game {
     this.sockets = {};
     this.players = {};
     this.golds = [];
+    this.huts = {};
     this.goldGenerator = new GoldGenerator();
     this.lastUpdateTime = Date.now();
     this.shouldSendUpdate = false;
@@ -21,17 +22,13 @@ class Game {
     const x = Constants.MAP_SIZE * (0.25 + Math.random() * 0.5);
     const y = Constants.MAP_SIZE * (0.25 + Math.random() * 0.5);
     this.players[socket.id] = new Player(socket.id, username, x, y);
-    this.huts.push(players[socket.id].hut);
+    this.huts[socket.id] = this.players[socket.id].hut;
   }
 
   removePlayer(socket) {
-    delete this.huts[players[socket.id].hut]
-    //this one below is even more wrong i think
-    //this.huts = this.huts.filter(hut => !players[socket.id].hut);
+    delete this.huts[socket.id];
     delete this.sockets[socket.id];
     delete this.players[socket.id];
-  
-    
   }
 
   handleInput(socket, dir) {
@@ -107,7 +104,7 @@ class Game {
     const nearbyGolds = this.golds.filter(
       g => g.distanceTo(player) <= Constants.MAP_SIZE / 2,
     );
-    const nearbyHuts = this.huts.filter(
+    const nearbyHuts = Object.values(this.huts).filter(
       h => h.distanceTo(player) <= Constants.MAP_SIZE / 2,
     );
 

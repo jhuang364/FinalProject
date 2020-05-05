@@ -5,7 +5,7 @@ import { getCurrentState } from './state';
 
 const Constants = require('../shared/constants');
 
-const { PLAYER_RADIUS, PLAYER_MAX_HP, MAP_SIZE, GOLD_RADIUS } = Constants;
+const { PLAYER_RADIUS, PLAYER_MAX_HP, MAP_SIZE, GOLD_RADIUS, HUT_RADIUS, HUT_MAX_HP} = Constants;
 
 // Get the canvas graphics context
 const canvas = document.getElementById('game-canvas');
@@ -134,15 +134,15 @@ function renderHut(me, hut) {
   // Draw hut health bar
   context.fillStyle = 'white';
   context.fillRect(
-    canvasX - HUT_RADIUS,
-    canvasY + HUT_RADIUS + 8,
+    canvas.width / 2 + x - me.x - HUT_RADIUS,
+    canvas.height / 2 + y - me.y + HUT_RADIUS + 8,
     HUT_RADIUS * 2,
     2,
   );
   context.fillStyle = 'red';
   context.fillRect(
-    canvasX - HUT_RADIUS + HUT_RADIUS * 2 * hut.hp / HUT_MAX_HP,
-    canvasY + HUT_RADIUS + 8,
+    canvas.width / 2 + x - me.x - HUT_RADIUS + HUT_RADIUS * 2 * hut.hp / HUT_MAX_HP,
+    canvas.height / 2 + y - me.y + HUT_RADIUS + 8,
     HUT_RADIUS * 2 * (1 - hut.hp / HUT_MAX_HP),
     2,
   );
