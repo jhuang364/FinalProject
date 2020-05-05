@@ -10,7 +10,7 @@ class Player extends ObjectClass {
     this.gold = 0;
     this.hp = Constants.PLAYER_MAX_HP;
     this.score = 0;
-    return new Hut(this.id, this.x, this.y);
+    this.hut = new Hut(id, x, y);
   }
 
   update(dt) {

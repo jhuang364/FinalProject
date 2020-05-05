@@ -30,7 +30,7 @@ window.addEventListener('resize', debounce(40, setCanvasDimensions));
 //TODO
 function render() {
   //Refer to the state for game update info
-  const { me, others, golds } = getCurrentState();
+  const { me, others, golds, huts } = getCurrentState();
   if (!me) {
     return;
   }

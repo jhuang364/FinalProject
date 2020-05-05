@@ -9,6 +9,7 @@ class Hut extends ObjectClass {
     this.parentid = parentID;
     this.hp = Constants.HUT_MAX_HP;
     this.gold = 0;
+    this.huts = [];
   }
 }
 
