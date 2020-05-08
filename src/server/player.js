@@ -2,6 +2,7 @@ const ObjectClass = require('./object');
 const Gold = require('./gold')
 const Hut = require('./hut')
 const Constants = require('../shared/constants');
+const Bullet = require('./bullet');
 
 class Player extends ObjectClass {
   constructor(id, username, x, y) {
@@ -11,17 +12,21 @@ class Player extends ObjectClass {
     this.hp = Constants.PLAYER_MAX_HP;
     this.score = 0;
     this.hut = new Hut(id, x, y);
+    this.fireCooldown = 0;
   }
 
   update(dt) {
     super.update(dt);
 
-    // Update score
-    this.score += dt * Constants.SCORE_PER_SECOND;
-
     // Make sure the player stays in bounds
     this.x = Math.max(0, Math.min(Constants.MAP_SIZE, this.x));
     this.y = Math.max(0, Math.min(Constants.MAP_SIZE, this.y));
+
+    this.fireCooldown -= dt;
+    if (this.fireCooldown <= 0) {
+      this.fireCooldown += Constants.PLAYER_FIRE_COOLDOWN;
+      return new Bullet(this.id, this.x, this.y, this.direction);
+    }
   }
 
   addGold() {
@@ -35,6 +40,10 @@ class Player extends ObjectClass {
     }
     this.gold -= cost;
     return true;
+  }
+
+  takeBulletDamage() {
+    this.hp -= Constants.BULLET_DAMAGE;
   }
 
   serializeForUpdate() {

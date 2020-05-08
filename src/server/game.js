@@ -2,12 +2,16 @@ const Constants = require('../shared/constants');
 const Player = require('./player');
 const GoldGenerator = require('./goldGenerator');
 const Hut = require('./hut');
+const Bullet = require('./bullet');
+const applyCollisions = require('./collisions');
+
 
 class Game {
   constructor() {
     this.sockets = {};
     this.players = {};
     this.golds = [];
+    this.bullets = [];
     this.huts = {};
     this.goldGenerator = new GoldGenerator();
     this.lastUpdateTime = Date.now();
@@ -43,11 +47,30 @@ class Game {
     const dt = (now - this.lastUpdateTime) / 1000;
     this.lastUpdateTime = now;
 
+    // Update each bullet
+    const bulletsToRemove = [];
+    this.bullets.forEach(bullet => {
+      if (bullet.update(dt)) {
+        // Destroy this bullet
+        bulletsToRemove.push(bullet);
+      }
+    });
+    this.bullets = this.bullets.filter(bullet => !bulletsToRemove.includes(bullet));
+    
     // Update each player
     Object.keys(this.sockets).forEach(playerID => {
       const player = this.players[playerID];
-      player.update(dt);
+      const newBullet = player.update(dt);
+      if (newBullet) {
+        this.bullets.push(newBullet);
+      }
     });
+
+    // Apply collisions, give players score for hitting bullets
+    const destroyedBullets = applyCollisions(Object.values(this.players), this.bullets, Object.values(this.huts));
+    this.bullets = this.bullets.filter(bullet => !destroyedBullets.includes(bullet));
+
+    // Generate gold  
     const newGold = this.goldGenerator.update(dt);
     if(newGold) {
       this.golds.push(newGold);
@@ -66,13 +89,19 @@ class Game {
     });
     this.golds = this.golds.filter(gold => !goldToRemove.includes(gold));
 
-    // Check if any players are dead
+    // Check if any huts are dead and if player hp = 0
     Object.keys(this.sockets).forEach(playerID => {
       const socket = this.sockets[playerID];
       const player = this.players[playerID];
-      if (player.hp <= 0) {
+      const hut = this.huts[playerID];
+      if (hut.hp <= 0) {
         socket.emit(Constants.MSG_TYPES.GAME_OVER);
         this.removePlayer(socket);
+      }
+      if(player.hp <= 0) {
+        player.x = hut.x;
+        player.y = hut.y;
+        player.hp = Constants.PLAYER_MAX_HP
       }
     });
 
@@ -107,6 +136,9 @@ class Game {
     const nearbyHuts = Object.values(this.huts).filter(
       h => h.distanceTo(player) <= Constants.MAP_SIZE / 2,
     );
+    const nearbyBullets = this.bullets.filter(
+      b => b.distanceTo(player) <= Constants.MAP_SIZE / 2,
+    );
 
     return {
       t: Date.now(),
@@ -114,6 +146,7 @@ class Game {
       others: nearbyPlayers.map(p => p.serializeForUpdate()),
       golds: nearbyGolds.map(g => g.serializeForUpdate()),
       huts: nearbyHuts.map(h => h.serializeForUpdate()),
+      bullets: nearbyBullets.map(b => b.serializeForUpdate()),
       leaderboard,
     };
   }

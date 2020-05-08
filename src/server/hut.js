@@ -10,6 +10,16 @@ class Hut extends ObjectClass {
     this.hp = Constants.HUT_MAX_HP;
     this.gold = 0;
   }
+
+  takeBulletDamage() {
+    this.hp -= Constants.BULLET_DAMAGE;
+  }
+  serializeForUpdate() {
+    return {
+      ...(super.serializeForUpdate()),
+      hp: this.hp,
+    };
+  }
 }
 
 module.exports = Hut;

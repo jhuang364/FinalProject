@@ -5,7 +5,7 @@ import { getCurrentState } from './state';
 
 const Constants = require('../shared/constants');
 
-const { PLAYER_RADIUS, PLAYER_MAX_HP, MAP_SIZE, GOLD_RADIUS, HUT_RADIUS, HUT_MAX_HP} = Constants;
+const { PLAYER_RADIUS, PLAYER_MAX_HP, MAP_SIZE, GOLD_RADIUS, HUT_RADIUS, HUT_MAX_HP, BULLET_RADIUS} = Constants;
 
 // Get the canvas graphics context
 const canvas = document.getElementById('game-canvas');
@@ -23,14 +23,9 @@ function setCanvasDimensions() {
 window.addEventListener('resize', debounce(40, setCanvasDimensions));
 
 //Primary function for the render class, list objects HERE:
-//TODO Fort
-//TODO Player
-//TODO etc.
-//TODO
-//TODO
 function render() {
   //Refer to the state for game update info
-  const { me, others, golds, huts } = getCurrentState();
+  const { me, others, golds, huts, bullets} = getCurrentState();
   if (!me) {
     return;
   }
@@ -53,6 +48,9 @@ function render() {
   // Draw all huts
   huts.forEach(renderHut.bind(null,me));
 
+    // Draw all bullets
+    bullets.forEach(renderBullet.bind(null, me));
+
 }
 
 //Sample background
@@ -71,6 +69,17 @@ function renderBackground(x, y) {
   backgroundGradient.addColorStop(0, 'cyan');
   context.fillStyle = backgroundGradient;
   context.fillRect(0, 0, canvas.width, canvas.height);
+}
+
+function renderBullet(me, bullet) {
+  const { x, y } = bullet;
+  context.drawImage(
+    getAsset('bullet.svg'),
+    canvas.width / 2 + x - me.x - BULLET_RADIUS,
+    canvas.height / 2 + y - me.y - BULLET_RADIUS,
+    BULLET_RADIUS * 2,
+    BULLET_RADIUS * 2,
+  );
 }
 
 // (Sample) a ship at the given coordinates
