@@ -9,7 +9,7 @@ class GoldGenerator {
   update(dt) {
     this.generateCooldown -= dt;
     if (this.generateCooldown <= 0) {
-      this.generateCooldown += Constants.GENERATE_COOLDOWN;
+      this.generateCooldown += Constants.GOLD_GENERATE_COOLDOWN;
       this.id += 1;
       const x = Math.random() * 3000;
       const y = Math.random() * 3000;

@@ -13,6 +13,7 @@ class Player extends ObjectClass {
     this.score = 0;
     this.hut = new Hut(id, x, y);
     this.fireCooldown = 0;
+    this.regenCooldown = 0;
   }
 
   update(dt) {
@@ -21,6 +22,12 @@ class Player extends ObjectClass {
     // Make sure the player stays in bounds
     this.x = Math.max(0, Math.min(Constants.MAP_SIZE, this.x));
     this.y = Math.max(0, Math.min(Constants.MAP_SIZE, this.y));
+
+    this.regenCooldown -= dt;
+    if (this.regenCooldown <= 0) {
+      this.regenCooldown += Constants.PLAYER_REGEN_COOLDOWN;
+      this.hp += Math.min(Constants.PLAYER_REGEN_PER_SECOND, Constants.PLAYER_MAX_HP - this.hp);
+    }
 
     this.fireCooldown -= dt;
     if (this.fireCooldown <= 0) {

@@ -102,7 +102,11 @@ function renderPlayer(me, player) {
   context.restore();
 
   // Draw health bar
+  if(player == me) {
+    context.fillStyle = 'yellow';
+  } else {
   context.fillStyle = 'white';
+  }
   context.fillRect(
     canvasX - PLAYER_RADIUS,
     canvasY + PLAYER_RADIUS + 8,
@@ -116,6 +120,16 @@ function renderPlayer(me, player) {
     PLAYER_RADIUS * 2 * (1 - player.hp / PLAYER_MAX_HP),
     2,
   );
+
+  context.fillStyle = 'white';
+  context.font = "12px Arial";
+  if(player == me) {
+  context.fillText(
+    "Gold: " + Math.round(me.gold),
+    canvasX - PLAYER_RADIUS,
+    canvasY + PLAYER_RADIUS + 30,
+  )
+  }
 }
 
 //Draw gold
@@ -141,7 +155,7 @@ function renderHut(me, hut) {
     HUT_RADIUS * 2,
   );
   // Draw hut health bar
-  context.fillStyle = 'white';
+  context.fillStyle = 'white'
   context.fillRect(
     canvas.width / 2 + x - me.x - HUT_RADIUS,
     canvas.height / 2 + y - me.y + HUT_RADIUS + 8,

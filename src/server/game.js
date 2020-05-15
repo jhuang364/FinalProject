@@ -23,8 +23,8 @@ class Game {
     this.sockets[socket.id] = socket;
 
     // Generate a position to start this player at.
-    const x = Constants.MAP_SIZE * (0.25 + Math.random() * 0.5);
-    const y = Constants.MAP_SIZE * (0.25 + Math.random() * 0.5);
+    const x = Constants.MAP_SIZE * (Math.random() * 0.99);
+    const y = Constants.MAP_SIZE * (Math.random() * 0.99);
     this.players[socket.id] = new Player(socket.id, username, x, y);
     this.huts[socket.id] = this.players[socket.id].hut;
   }
@@ -66,13 +66,15 @@ class Game {
       }
     });
 
-    // Apply collisions, give players score for hitting bullets
+    
+    // Apply collisions
     const destroyedBullets = applyCollisions(Object.values(this.players), this.bullets, Object.values(this.huts));
     this.bullets = this.bullets.filter(bullet => !destroyedBullets.includes(bullet));
 
+
     // Generate gold  
     const newGold = this.goldGenerator.update(dt);
-    if(newGold) {
+    if(newGold && this.golds.length < Constants.MAX_MAP_GOLD) {
       this.golds.push(newGold);
     }
 
@@ -81,8 +83,10 @@ class Game {
     this.golds.forEach(gold => {
         Object.keys(this.sockets).forEach(playerID => {
           const player = this.players[playerID];
+          const hut = this.huts[playerID];
           if(player.distanceTo(gold) <= Constants.COLLECTION_DISTANCE){
             player.addGold();
+            hut.restoreHP();
             goldToRemove.push(gold);
           }
         });
@@ -95,13 +99,24 @@ class Game {
       const player = this.players[playerID];
       const hut = this.huts[playerID];
       if (hut.hp <= 0) {
+        destroyedBullets.forEach(b => {
+          if (this.players[b.parentID]) {
+            this.players[b.parentID].gold += player.gold;
+          }
+        });
         socket.emit(Constants.MSG_TYPES.GAME_OVER);
         this.removePlayer(socket);
       }
       if(player.hp <= 0) {
+        destroyedBullets.forEach(b => {
+          if (this.players[b.parentID]) {
+            this.players[b.parentID].gold += Math.round(player.gold / 3);
+            player.gold -= Math.round(player.gold / 3);
+          }
+        });
         player.x = hut.x;
         player.y = hut.y;
-        player.hp = Constants.PLAYER_MAX_HP
+        player.hp = Constants.PLAYER_MAX_HP;
       }
     });
 
