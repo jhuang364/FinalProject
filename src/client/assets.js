@@ -1,8 +1,10 @@
 //Manages assets such as images needed for the game
 
 const ASSET_NAMES = [
-  'ship.svg',
-  'bullet.svg',
+  'Coin.svg',
+  'Miner.svg',
+  'Pick.svg',
+  'Tent.svg',
 ];
 
 const assets = {};

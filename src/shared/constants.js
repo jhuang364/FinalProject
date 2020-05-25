@@ -24,6 +24,6 @@ module.exports = Object.freeze({
   },
   COLLECTION_DISTANCE: 30,
   GOLD_GENERATE_COOLDOWN: 0.5,
-  MAX_MAP_GOLD: 1000,
-  GOLD_RADIUS: 10,
+  MAX_MAP_GOLD: 200,
+  GOLD_RADIUS: 30,
 });

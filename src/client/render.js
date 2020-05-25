@@ -65,8 +65,8 @@ function renderBackground(x, y) {
     backgroundY,
     MAP_SIZE / 2,
   );
-  backgroundGradient.addColorStop(1, 'blue');
-  backgroundGradient.addColorStop(0, 'cyan');
+  backgroundGradient.addColorStop(1, 'gray');
+  backgroundGradient.addColorStop(0, 'gray');
   context.fillStyle = backgroundGradient;
   context.fillRect(0, 0, canvas.width, canvas.height);
 }
@@ -74,7 +74,7 @@ function renderBackground(x, y) {
 function renderBullet(me, bullet) {
   const { x, y } = bullet;
   context.drawImage(
-    getAsset('bullet.svg'),
+    getAsset('Pick.svg'),
     canvas.width / 2 + x - me.x - BULLET_RADIUS,
     canvas.height / 2 + y - me.y - BULLET_RADIUS,
     BULLET_RADIUS * 2,
@@ -93,7 +93,7 @@ function renderPlayer(me, player) {
   context.translate(canvasX, canvasY);
   context.rotate(direction);
   context.drawImage(
-    getAsset('ship.svg'),
+    getAsset('Miner.svg'),
     -PLAYER_RADIUS,
     -PLAYER_RADIUS,
     PLAYER_RADIUS * 2,
@@ -136,7 +136,7 @@ function renderPlayer(me, player) {
 function renderGold(me, gold) {
   const { x, y } = gold;
   context.drawImage(
-    getAsset('bullet.svg'),
+    getAsset('Coin.svg'),
     canvas.width / 2 + x - me.x - GOLD_RADIUS,
     canvas.height / 2 + y - me.y - GOLD_RADIUS,
     GOLD_RADIUS * 2,
@@ -148,7 +148,7 @@ function renderGold(me, gold) {
 function renderHut(me, hut) {
   const { x, y } = hut;
   context.drawImage(
-    getAsset('ship.svg'),
+    getAsset('Tent.svg'),
     canvas.width / 2 + x - me.x - HUT_RADIUS,
     canvas.height / 2 + y - me.y - HUT_RADIUS,
     HUT_RADIUS * 2,
